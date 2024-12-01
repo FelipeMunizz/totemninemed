@@ -1,6 +1,7 @@
 package com.femuniz.totenninemed.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -11,14 +12,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.femuniz.totenninemed.R;
 import com.femuniz.totenninemed.activity.loader.CustomLoader;
+import com.femuniz.totenninemed.core.service.TokenService;
 import com.femuniz.totenninemed.fragment.CustomToast;
 
 public class BaseActivity extends AppCompatActivity {
     private CustomLoader _customLoader;
+    private TokenService _tokenService;
     @Override
 protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     _customLoader = new CustomLoader(this);
+    _tokenService = new TokenService(this);
+
+    validateUser();
 }
     /**
      * Exibe um loader
@@ -54,6 +60,24 @@ protected void onCreate(@Nullable Bundle savedInstanceState) {
     }
 
     /**
+     * Método genérico para redirecionar para outra Activity
+     * @param targetActivity
+     * @param clearTask
+     */
+    protected void redirectTo(Class<?> targetActivity, boolean clearTask) {
+        Intent intent = new Intent(this, targetActivity);
+
+        if (clearTask) {
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        }
+
+        startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+
+        finish();
+    }
+
+    /**
      * Verifica se há conexão com a Internet.
      *
      * @return true se conectado, false caso contrário.
@@ -68,6 +92,20 @@ protected void onCreate(@Nullable Bundle savedInstanceState) {
         return false;
     }
 
+    private void validateUser(){
+        if(!_tokenService.isValidToken())
+            redirectToLogin();
+    }
+
+    private void redirectToLogin(){
+        _tokenService.removeToken();
+
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+
+        finish();
+    }
     /**
      * Redireciona o clique no botão de voltar no Toolbar.
      */
@@ -75,13 +113,6 @@ protected void onCreate(@Nullable Bundle savedInstanceState) {
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
-    }
-
-    /**
-     * Método abstrato para forçar as subclasses a implementar a inicialização da UI.
-     */
-    protected void initializeUI() {
-
     }
 
     public enum TypeToast{
