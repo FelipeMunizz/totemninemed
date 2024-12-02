@@ -1,5 +1,6 @@
 package com.femuniz.totenninemed.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -11,9 +12,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.femuniz.totenninemed.R;
+import com.femuniz.totenninemed.activity.dialog.ConfirmedModal;
 import com.femuniz.totenninemed.activity.loader.CustomLoader;
 import com.femuniz.totenninemed.core.service.TokenService;
 import com.femuniz.totenninemed.fragment.CustomToast;
+
+import java.util.function.Consumer;
 
 public class BaseActivity extends AppCompatActivity {
     private CustomLoader _customLoader;
@@ -58,6 +62,24 @@ protected void onCreate(@Nullable Bundle savedInstanceState) {
                 break;
         }
     }
+
+    /**
+     * Modal para confirmação
+     * @param activity
+     * @param title
+     * @param message
+     * @param callback
+     */
+    protected void showConfirmedModal(Activity activity, String title, String message, Consumer<Boolean> callback) {
+        ConfirmedModal confirmedModal = new ConfirmedModal(activity);
+        confirmedModal.showConfirmedModal(title, message, isConfirmed -> {
+
+            if (callback != null) {
+                callback.accept(isConfirmed);
+            }
+        });
+    }
+
 
     /**
      * Método genérico para redirecionar para outra Activity

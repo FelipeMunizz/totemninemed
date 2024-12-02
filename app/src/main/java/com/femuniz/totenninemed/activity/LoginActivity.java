@@ -12,8 +12,10 @@ import androidx.core.view.WindowInsetsCompat.Type;
 import androidx.core.graphics.Insets;
 
 import com.femuniz.totenninemed.R;
+import com.femuniz.totenninemed.activity.dialog.ConfirmedModal;
 import com.femuniz.totenninemed.activity.loader.CustomLoader;
 import com.femuniz.totenninemed.core.dto.LoginUserDTO;
+import com.femuniz.totenninemed.core.interfaces.ApiCallback;
 import com.femuniz.totenninemed.core.model.response.RetornoToken;
 import com.femuniz.totenninemed.core.service.TokenService;
 import com.femuniz.totenninemed.core.service.UserService;
@@ -34,7 +36,7 @@ public class LoginActivity extends AppCompatActivity {
             return insets;
         });
 
-        _userService = new UserService();
+        _userService = new UserService(this);
         _customLoader = new CustomLoader(this);
         _tokenService = new TokenService(this);
 
@@ -54,10 +56,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginRequest(LoginUserDTO model){
-        _userService.Login(model, new UserService.ApiCallback<RetornoToken>() {
+        _userService.Login(model, new ApiCallback<>() {
             @Override
             public void onSuccess(RetornoToken result) {
-                if(result == null || result.getToken() == null || result.getToken().isEmpty()){
+                if (result == null || result.getToken() == null || result.getToken().isEmpty()) {
                     CustomToast.showToast(
                             getApplicationContext(),
                             "Usuário não autenticado",
@@ -65,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
                             R.drawable.ic_error_24dp
                     );
                     _customLoader.hideLoader();
-                }else{
+                } else {
                     _tokenService.saveToken(result.getToken());
                     _customLoader.hideLoader();
 
