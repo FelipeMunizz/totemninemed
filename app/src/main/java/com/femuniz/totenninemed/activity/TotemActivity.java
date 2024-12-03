@@ -1,5 +1,6 @@
 package com.femuniz.totenninemed.activity;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.widget.Button;
 
@@ -8,9 +9,14 @@ import androidx.activity.EdgeToEdge;
 import com.femuniz.totenninemed.R;
 import com.femuniz.totenninemed.core.interfaces.ApiCallback;
 import com.femuniz.totenninemed.core.model.SenhaToten;
-import com.femuniz.totenninemed.core.model.TipoAtendimento;
 import com.femuniz.totenninemed.core.model.response.RetornoGenerico;
 import com.femuniz.totenninemed.core.service.TotemService;
+import com.femuniz.totenninemed.fragment.CustomToast;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
+
+import java.util.Base64;
 
 public class TotemActivity extends BaseActivity{
     private final int IdToten = 1;
@@ -34,27 +40,43 @@ public class TotemActivity extends BaseActivity{
         Button btnComumAgendado = findViewById(R.id.btn_comum_agendado);
 
         btnPrioritario.setOnClickListener(v -> {
-            AddSenha(TipoAtendimento.Prioritario);
+            AddSenha(1);
         });
         btnPrioritarioAgendado.setOnClickListener(v -> {
-            AddSenha(TipoAtendimento.PrioritarioAgendado);
+            AddSenha(2);
         });
         btnComum.setOnClickListener(v -> {
-            AddSenha(TipoAtendimento.Comum);
+            AddSenha(3);
         });
         btnComumAgendado.setOnClickListener(v -> {
-            AddSenha(TipoAtendimento.ComumAgendado);
+            AddSenha(4);
         });
     }
 
-    private void AddSenha(TipoAtendimento tipoAtendimento){
+    private void AddSenha(int tipoAtendimento){
         SenhaToten senhaToten = new SenhaToten();
         senhaToten.idToten = IdToten;
         senhaToten.tipoAtendimento = tipoAtendimento;
         _service.AdicionaSenhaToten(senhaToten, new ApiCallback<>() {
             @Override
             public void onSuccess(RetornoGenerico<SenhaToten> result) {
+                SenhaToten senha = result.result;
+                if(result.success){
+                    try {
+                        String param = "senha=" + senha.senhaPainel + "&dataSenha" + senha.dataHoraCriacao;
+                        String base64Param = Base64.getEncoder().encodeToString(param.getBytes());
+                        String baseString = "https://brave-moss-08c07190f.4.azurestaticapps.net?" + "params=" + base64Param;
+                        BarcodeEncoder encoder = new BarcodeEncoder();
+                        Bitmap qrcode = encoder.encodeBitmap(baseString, BarcodeFormat.QR_CODE, 200, 200);
 
+                        showConfirmedModal("SENHA: " + senha.senhaPainel, "Escaneio o qr para ver a senha", qrcode, isConfirmed ->{
+                            if(isConfirmed)
+                                CustomToast.showToast(getApplicationContext(),"Senha Impressa", R.color.success_color, R.drawable.ic_done_24dp);
+                        });
+                    } catch (WriterException e) {
+                        CustomToast.showToast(getApplicationContext(), e.getMessage(), R.color.error_color, R.drawable.ic_error_24dp);
+                    }
+                }
             }
 
             @Override

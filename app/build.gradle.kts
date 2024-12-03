@@ -44,4 +44,8 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit2.converter.gson)
     implementation(libs.java.jwt)
+
+    //Libs Qr Code
+    implementation(libs.zxing.android.embedded)
+    implementation(libs.appcompat.v161)
 }

@@ -3,6 +3,7 @@ package com.femuniz.totenninemed.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -65,14 +66,13 @@ protected void onCreate(@Nullable Bundle savedInstanceState) {
 
     /**
      * Modal para confirmação
-     * @param activity
      * @param title
      * @param message
      * @param callback
      */
-    protected void showConfirmedModal(Activity activity, String title, String message, Consumer<Boolean> callback) {
-        ConfirmedModal confirmedModal = new ConfirmedModal(activity);
-        confirmedModal.showConfirmedModal(title, message, isConfirmed -> {
+    protected void showConfirmedModal(String title, String message, Bitmap qrcode, Consumer<Boolean> callback) {
+        ConfirmedModal confirmedModal = new ConfirmedModal(this);
+        confirmedModal.showConfirmedModal(title, message, qrcode, isConfirmed -> {
 
             if (callback != null) {
                 callback.accept(isConfirmed);

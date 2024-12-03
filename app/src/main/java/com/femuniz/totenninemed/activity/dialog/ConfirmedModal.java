@@ -2,8 +2,10 @@ package com.femuniz.totenninemed.activity.dialog;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.femuniz.totenninemed.R;
@@ -19,7 +21,7 @@ public class ConfirmedModal {
         this._activity = activity;
     }
 
-    public void showConfirmedModal(String title, String message, Consumer<Boolean> callback) {
+    public void showConfirmedModal(String title, String message, Bitmap qrcode, Consumer<Boolean> callback) {
         AlertDialog.Builder builder = new AlertDialog.Builder(_activity);
         LayoutInflater inflater = _activity.getLayoutInflater();
 
@@ -31,6 +33,9 @@ public class ConfirmedModal {
         TextView txtMessage = dialogView.findViewById(R.id.edMessageModal);
         txtTitle.setText(title);
         txtMessage.setText(message);
+
+        ImageView ivQrCode = dialogView.findViewById(R.id.qrCodeImageView);
+        ivQrCode.setImageBitmap(qrcode);
 
         MaterialButton btnCancel = dialogView.findViewById(R.id.btn_modal_cancel);
         MaterialButton btnConfirm = dialogView.findViewById(R.id.btn_modal_confirmed);
