@@ -74,7 +74,7 @@ public class TotemActivity extends BaseActivity{
                         BarcodeEncoder encoder = new BarcodeEncoder();
                         Bitmap qrcode = encoder.encodeBitmap(baseString, BarcodeFormat.QR_CODE, 200, 200);
 
-                        showConfirmedModal("SENHA: " + senha.senhaPainel, "Escaneio o qr para ver a senha", qrcode, isConfirmed ->{
+                        showConfirmedModal("SENHA: " + senha.senhaPainel, "Deseja imprimir a senha", qrcode, isConfirmed ->{
                             if(isConfirmed)
                                 CustomToast.showToast(getApplicationContext(),"Senha Impressa", R.color.success_color, R.drawable.ic_done_24dp);
                         });
