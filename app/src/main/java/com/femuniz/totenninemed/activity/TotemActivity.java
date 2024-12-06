@@ -1,5 +1,6 @@
 package com.femuniz.totenninemed.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -90,6 +91,7 @@ public class TotemActivity extends BaseActivity{
         });
     }
 
+    @SuppressLint("MissingSuperCall")
     @Override
     public void onBackPressed(){
 
