@@ -5,4 +5,5 @@ public class UrlApiNineMed {
 
     public static final String Account = baseUrl + "Account/";
     public static final String Totem = baseUrl + "Toten/";
+    public static final String Clinic = baseUrl + "Clinica/";
 }

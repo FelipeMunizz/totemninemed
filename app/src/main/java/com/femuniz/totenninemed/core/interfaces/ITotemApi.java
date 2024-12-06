@@ -12,7 +12,7 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
-public interface TotemApi {
+public interface ITotemApi {
     @GET("ListaTotensClinica/{idClinica}")
     Call<List<Toten>> listaTotensClinica(@Path("idClinica") int idClinica);
 

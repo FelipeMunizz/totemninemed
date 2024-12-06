@@ -3,8 +3,8 @@ package com.femuniz.totenninemed.core.service;
 import android.content.Context;
 
 import com.femuniz.totenninemed.core.dto.LoginUserDTO;
-import com.femuniz.totenninemed.core.interfaces.ApiCallback;
-import com.femuniz.totenninemed.core.interfaces.UserApi;
+import com.femuniz.totenninemed.core.interfaces.IApiCallback;
+import com.femuniz.totenninemed.core.interfaces.IUserApi;
 import com.femuniz.totenninemed.core.model.response.RetornoToken;
 import com.femuniz.totenninemed.core.model.UrlApiNineMed;
 import com.femuniz.totenninemed.helpers.RetrofitClient;
@@ -15,16 +15,16 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class UserService{
-    private UserApi _userApi;
+    private IUserApi _I_userApi;
 
     public UserService(Context context){
         Retrofit retrofit = RetrofitClient.GetClient(UrlApiNineMed.Account, context);
 
-        _userApi = retrofit.create(UserApi.class);
+        _I_userApi = retrofit.create(IUserApi.class);
     }
 
-    public void Login(LoginUserDTO model, final ApiCallback<RetornoToken> callback){
-        Call<RetornoToken> call = _userApi.CreateToken(model);
+    public void Login(LoginUserDTO model, final IApiCallback<RetornoToken> callback){
+        Call<RetornoToken> call = _I_userApi.CreateToken(model);
 
         call.enqueue(new Callback<>() {
             @Override

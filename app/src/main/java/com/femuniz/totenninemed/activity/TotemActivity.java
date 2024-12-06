@@ -1,5 +1,6 @@
 package com.femuniz.totenninemed.activity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.widget.Button;
@@ -7,7 +8,7 @@ import android.widget.Button;
 import androidx.activity.EdgeToEdge;
 
 import com.femuniz.totenninemed.R;
-import com.femuniz.totenninemed.core.interfaces.ApiCallback;
+import com.femuniz.totenninemed.core.interfaces.IApiCallback;
 import com.femuniz.totenninemed.core.model.SenhaToten;
 import com.femuniz.totenninemed.core.model.response.RetornoGenerico;
 import com.femuniz.totenninemed.core.service.TotemService;
@@ -19,13 +20,16 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 import java.util.Base64;
 
 public class TotemActivity extends BaseActivity{
-    private final int IdToten = 1;
+    private int IdToten;
     private TotemService _service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         initializeUI();
+
+        Intent intent = getIntent();
+        IdToten = intent.getIntExtra("idTotem", 0);
     }
 
     protected void initializeUI(){
@@ -57,7 +61,7 @@ public class TotemActivity extends BaseActivity{
         SenhaToten senhaToten = new SenhaToten();
         senhaToten.idToten = IdToten;
         senhaToten.tipoAtendimento = tipoAtendimento;
-        _service.AdicionaSenhaToten(senhaToten, new ApiCallback<>() {
+        _service.AdicionaSenhaToten(senhaToten, new IApiCallback<>() {
             @Override
             public void onSuccess(RetornoGenerico<SenhaToten> result) {
                 SenhaToten senha = result.result;
@@ -84,5 +88,10 @@ public class TotemActivity extends BaseActivity{
 
             }
         });
+    }
+
+    @Override
+    public void onBackPressed(){
+
     }
 }

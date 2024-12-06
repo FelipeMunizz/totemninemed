@@ -12,10 +12,9 @@ import androidx.core.view.WindowInsetsCompat.Type;
 import androidx.core.graphics.Insets;
 
 import com.femuniz.totenninemed.R;
-import com.femuniz.totenninemed.activity.dialog.ConfirmedModal;
 import com.femuniz.totenninemed.activity.loader.CustomLoader;
 import com.femuniz.totenninemed.core.dto.LoginUserDTO;
-import com.femuniz.totenninemed.core.interfaces.ApiCallback;
+import com.femuniz.totenninemed.core.interfaces.IApiCallback;
 import com.femuniz.totenninemed.core.model.response.RetornoToken;
 import com.femuniz.totenninemed.core.service.TokenService;
 import com.femuniz.totenninemed.core.service.UserService;
@@ -56,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginRequest(LoginUserDTO model){
-        _userService.Login(model, new ApiCallback<>() {
+        _userService.Login(model, new IApiCallback<>() {
             @Override
             public void onSuccess(RetornoToken result) {
                 if (result == null || result.getToken() == null || result.getToken().isEmpty()) {
@@ -71,9 +70,9 @@ public class LoginActivity extends AppCompatActivity {
                     _tokenService.saveToken(result.getToken());
                     _customLoader.hideLoader();
 
-                    startActivity(new Intent(LoginActivity.this, TotemActivity.class));
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-
+                    Intent intent = new Intent(LoginActivity.this, ListsClinicActivity.class);
+                    intent.putExtra("email", result.getEmail());
+                    startActivity(intent);
                     finish();
                 }
             }

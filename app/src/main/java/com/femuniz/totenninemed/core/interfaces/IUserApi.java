@@ -7,7 +7,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 
-public interface UserApi {
+public interface IUserApi {
     @POST("CreateToken")
     Call<RetornoToken> CreateToken(@Body LoginUserDTO model);
 }
