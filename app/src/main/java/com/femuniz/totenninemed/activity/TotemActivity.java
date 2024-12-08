@@ -45,16 +45,16 @@ public class TotemActivity extends BaseActivity{
         Button btnComumAgendado = findViewById(R.id.btn_comum_agendado);
 
         btnPrioritario.setOnClickListener(v -> {
-            AddSenha(1);
+            AddSenha(0);
         });
         btnPrioritarioAgendado.setOnClickListener(v -> {
-            AddSenha(2);
+            AddSenha(1);
         });
         btnComum.setOnClickListener(v -> {
-            AddSenha(3);
+            AddSenha(2);
         });
         btnComumAgendado.setOnClickListener(v -> {
-            AddSenha(4);
+            AddSenha(3);
         });
     }
 
@@ -77,6 +77,7 @@ public class TotemActivity extends BaseActivity{
                         showConfirmedModal("SENHA: " + senha.senhaPainel, "Deseja imprimir a senha", qrcode, isConfirmed ->{
                             if(isConfirmed)
                                 CustomToast.showToast(getApplicationContext(),"Senha Impressa", R.color.success_color, R.drawable.ic_done_24dp);
+                            //Implementar impressao caso o dispositivo tenha
                         });
                     } catch (WriterException e) {
                         CustomToast.showToast(getApplicationContext(), e.getMessage(), R.color.error_color, R.drawable.ic_error_24dp);
